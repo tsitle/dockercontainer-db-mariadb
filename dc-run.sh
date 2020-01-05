@@ -138,6 +138,20 @@ echo -n "$LVAR_IMG_VER_SHORT" | grep -q -E "[0-9]{1,2}[\.][0-9]{1,2}" || {
 
 # ----------------------------------------------------------
 
+LVAR_CNF_FN="dc-conf-${LVAR_IMG_VER_SHORT}.cnf"
+
+if [ ! -f "$LVAR_CNF_FN" ]; then
+	echo "Config file '$LVAR_CNF_FN' not found. Aborting." >/dev/stderr
+	exit 1
+fi
+
+. "$LVAR_CNF_FN"
+
+[ -n "$CFG_SYSUSR_MYSQL_USER_ID" ] && LCFG_MYSQL_USER_ID=$CFG_SYSUSR_MYSQL_USER_ID
+[ -n "$CFG_SYSUSR_MYSQL_GROUP_ID" ] && LCFG_MYSQL_GROUP_ID=$CFG_SYSUSR_MYSQL_GROUP_ID
+
+# ----------------------------------------------------------
+
 LVAR_REPO_PREFIX="tsle"
 LVAR_IMAGE_NAME="db-mariadb-$(_getCpuArch debian_dist)"
 LVAR_IMAGE_VER="$LVAR_IMG_VER_SHORT"
@@ -179,7 +193,7 @@ TMP_CONTNAME="db-mariadb${TMP_IMGVER_STR}-cont"
 
 TMP_PORT="37$(echo -n "$LVAR_IMG_VER_SHORT" | sed -e 's/10/1/' | tr -d .)"
 
-echo "Starting container '$TMP_CONTNAME' (TCP port ${TMP_PORT}, pw for root='abcd')..."
+echo "Starting container '$TMP_CONTNAME' (TCP port ${TMP_PORT})..."
 
 docker run \
 		--rm \
@@ -189,12 +203,12 @@ docker run \
 		-p "${TMP_PORT}:3306" \
 		-e "CF_SYSUSR_MYSQL_USER_ID=$LCFG_MYSQL_USER_ID" \
 		-e "CF_SYSUSR_MYSQL_GROUP_ID=$LCFG_MYSQL_GROUP_ID" \
-		-e "CF_DB_ROOT_PASSWORD=abcd" \
-		-e "CF_DB_USER_NAME=maniac" \
-		-e "CF_DB_USER_PASS=extreme" \
-		-e "CF_DB_SCHEME_NAME=example" \
-		-e "CF_ENABLE_DB_INIT_DEBUG=false" \
-		-e "CF_LANG=de_DE.UTF-8" \
-		-e "CF_TIMEZONE=Europe/Berlin" \
+		-e "CF_DB_ROOT_PASSWORD=$CFG_DB_ROOT_PASSWORD" \
+		-e "CF_DB_USER_NAME=$CFG_DB_USER_NAME" \
+		-e "CF_DB_USER_PASS=$CFG_DB_USER_PASS" \
+		-e "CF_DB_SCHEME_NAME=$CFG_DB_SCHEME_NAME" \
+		-e "CF_ENABLE_DB_INIT_DEBUG=$CFG_ENABLE_DB_INIT_DEBUG" \
+		-e "CF_LANG=$CFG_LANG" \
+		-e "CF_TIMEZONE=$CFG_TIMEZONE" \
 		--name "$TMP_CONTNAME" \
 		$LVAR_IMG_FULL

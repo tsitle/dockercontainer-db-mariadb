@@ -1,5 +1,7 @@
 /mpdata/*
 !/mpdata/do_not_remove
+/dc-conf-*.cnf
+!/dc-conf-*-SAMPLE.cnf
 
 # =========================
 # IDE Files
