@@ -27,9 +27,9 @@ The source for the image can be found here [https://github.com/tsitle/dockerimag
 ## Docker Container configuration
 - CF\_SYSUSR\_MYSQL\_USER\_ID [int]: User-ID for user that ownes the database files
 - CF\_SYSUSR\_MYSQL\_GROUP\_ID [int]: Group-ID for group that ownes the database files
-- CF\_MARIADB\_MAX\_ALLOWED\_PACKET [string]: Size string (e.g. "128M")
+- CF\_MYSQL\_MAX\_ALLOWED\_PACKET [string]: Size string (e.g. "128M")
 - CF\_MYSQL\_INNODB\_BUFFER\_POOL\_SIZE [string]: Size string (e.g. "8G")
-- CF\_MARIADB\_INNODB\_LOG\_FILE\_SIZE [string]: Size string (e.g. "64M")
+- CF\_MYSQL\_INNODB\_LOG\_FILE\_SIZE [string]: Size string (e.g. "64M")
 - CF\_LANG [string]: Language to use (en\_EN.UTF-8 or de\_DE.UTF-8)
 - CF\_TIMEZONE [string]: Timezone (e.g. 'Europe/Berlin')
 
