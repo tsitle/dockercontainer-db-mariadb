@@ -4,6 +4,13 @@
 # by TS, Jan 2020
 #
 
+# ----------------------------------------------------------
+
+# update Docker Image from remote repository? [true|false]
+LCFG_UPDATE_REMOTE_IMAGE=true
+
+# ----------------------------------------------------------
+
 # @param string $1 Path
 # @param int $2 Recursion level
 #
@@ -184,6 +191,9 @@ if [ $? -ne 0 ]; then
 			echo "$VAR_MYNAME: Error: could not pull image '${LVAR_IMG_FULL}'. Aborting." >/dev/stderr
 			exit 1
 		fi
+	elif [ "$LCFG_UPDATE_REMOTE_IMAGE" = "true" ]; then
+		echo "$VAR_MYNAME: Updating image from repository '${LVAR_REPO_PREFIX}/'..."
+		docker pull ${LVAR_IMG_FULL} || exit 1
 	fi
 fi
 
@@ -210,8 +220,8 @@ docker run \
 		-e "CF_ENABLE_DB_INIT_DEBUG=$CFG_ENABLE_DB_INIT_DEBUG" \
 		-e "CF_LANG=$CFG_LANG" \
 		-e "CF_TIMEZONE=$CFG_TIMEZONE" \
-		-e "CF_MARIADB_MAX_ALLOWED_PACKET=$CF_MARIADB_MAX_ALLOWED_PACKET" \
-		-e "CF_MARIADB_INNODB_BUFFER_POOL_SIZE=$CF_MARIADB_INNODB_BUFFER_POOL_SIZE" \
-		-e "CF_MARIADB_INNODB_LOG_FILE_SIZE=$CF_MARIADB_INNODB_LOG_FILE_SIZE" \
+		-e "CF_MYSQL_MAX_ALLOWED_PACKET=$CF_MYSQL_MAX_ALLOWED_PACKET" \
+		-e "CF_MYSQL_INNODB_BUFFER_POOL_SIZE=$CF_MYSQL_INNODB_BUFFER_POOL_SIZE" \
+		-e "CF_MYSQL_INNODB_LOG_FILE_SIZE=$CF_MYSQL_INNODB_LOG_FILE_SIZE" \
 		--name "$TMP_CONTNAME" \
 		$LVAR_IMG_FULL
